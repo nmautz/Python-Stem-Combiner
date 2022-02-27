@@ -19,20 +19,27 @@ fileExists = True
 if len(sys.argv) < 3:
     print("More arguments required... eg\n python3 stemcombine.py file1.wav file2.wav ")
 else:
-    for i in range(1, len(sys.argv)):
+    for i in range(1, len(sys.argv)-1):
         if not exists(sys.argv[i]):
+            print("File not found! \n " + sys.argv[i])
             fileExists = False
 
     if fileExists:
         combined_sounds = extractAudio(sys.argv[1])
-        print(type(combined_sounds))
-        for i in range(2, len(sys.argv)):
+        for i in range(2, len(sys.argv)-1):
             combined_sounds = combined_sounds.overlay(extractAudio(sys.argv[i]))
 
-        if not exists("result.wav"):
-            os.system("touch result.wav")
+        if not exists(sys.argv[len(sys.argv)-1]):
+            os.system("touch " + sys.argv[len(sys.argv)-1])
 
-        combined_sounds.export("result.wav", format="wav")
+        resultFile = sys.argv[len(sys.argv)-1]
+
+        extention = resultFile[len(resultFile)-3]
+        extention += resultFile[len(resultFile)-2]
+        extention += resultFile[len(resultFile)-1]
+
+
+        combined_sounds.export(sys.argv[len(sys.argv)-1], format=extention)
 
     else:
         print("One or more files do not exist!!!")
